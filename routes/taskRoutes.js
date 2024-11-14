@@ -3,7 +3,7 @@ const router = express.Router()
 const TaskController = require('../controllers/taskController')
 
 router.post('/create', TaskController.createTask)
-router.get('/', TaskController.returnTasks)
+router.get('/', TaskController.getTasks)
 router.delete('/remove/:id', TaskController.deleteTask)
-
+router.put('/update/:id', TaskController.updateTask)
 module.exports = router
