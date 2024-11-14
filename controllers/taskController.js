@@ -21,4 +21,16 @@ module.exports = class TaskController{
         })
         .catch(err => console.log(err))
     }
+
+    static async deleteTask(req, res) {
+        const idTask = req.params.id
+
+        try {
+            await Task.destroy({where: {id: idTask}})
+            res.json(200, { message: "sucess" });
+        }catch(error){
+            console.log(error)
+        }
+
+    }
 }
