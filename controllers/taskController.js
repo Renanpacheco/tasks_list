@@ -2,7 +2,10 @@ const { Sequelize, or} = require("sequelize");
 const Task = require('../models/Task');
 //
 module.exports = class TaskController{
-    
+    static async returnTasks(req, res){
+        const tasks = await Task.findAll();
+        res.json(tasks);
+    }
 
     static async createTask(req,res){
         let task = {

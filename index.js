@@ -19,6 +19,6 @@ app.use(express.json());
 //use of routes
 app.use('/', taskRoutes);
 
-conn.sync({force: true}).then(() => {
+conn.sync().then(() => {
     app.listen(port);
 }).catch(err => console.log(err))
