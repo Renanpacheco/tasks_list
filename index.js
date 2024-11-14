@@ -16,6 +16,9 @@ const taskController = require('./controllers/taskController');
 //config json response
 app.use(express.json());
 
+// use of routes
+app.use('/', taskRoutes);
+
 conn.sync({force: true}).then(() => {
     app.listen(port);
 }).catch(err => console.log(err))
