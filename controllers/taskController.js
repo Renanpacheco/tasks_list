@@ -1,5 +1,6 @@
 const { Sequelize, or} = require("sequelize");
 const Task = require('../models/Task');
+const { SELECT } = require("sequelize/lib/query-types");
 //
 module.exports = class TaskController{
     static async getTasks(req, res){
@@ -12,12 +13,18 @@ module.exports = class TaskController{
             name: req.body.name,
             cost: req.body.cost,
             data_limit: req.body.data_limit,
-            order: req.body.order,
+            order: await Task.count()
         }
-        if(search(task.name)){
+        
+        console.log(task)
+        const validation = await search(task.name)
+        if(validation){
             res.json(400,{message: "Alredy has this task name registerd"})
         }else{await Task.create(task)
             .then(() => {
+                //task.order = req.body.id;
+                
+                console.log(task.order);
                 res.json(200,task)
             })
             .catch(err => console.log(err))
@@ -43,7 +50,8 @@ module.exports = class TaskController{
             cost: req.body.cost,
             data_limit: req.body.data_limit,
         }
-        if(search(newTask.name)){
+        const validation = await search(idTask.name);
+        if(validation){
             res.json(400,{message: "Alredy has this task name registerd"})
         }else{
             try{
@@ -56,9 +64,11 @@ module.exports = class TaskController{
     }
 }
 
-async function search(name) {
-    const verificationName = await Task.findOne({where: {name: name}})
-    if (verificationName){
+async function search(isName) {
+    console.log(isName)
+    const verificationName = await Task.findOne({where: {name: isName}})
+    console.log(verificationName)
+    if (verificationName !== null) {
         return true
     }else{
         return false

@@ -2,6 +2,12 @@ const { DataTypes } = require ("sequelize")
 const db = require ("../db/conn")
 
 const Task = db.define('Task',{
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+
+    },
     name:{ 
         type: DataTypes.STRING,
         require: true,
@@ -13,9 +19,10 @@ const Task = db.define('Task',{
     data_limit: { 
         type: DataTypes.DATE,
         require: true,
-    },
+    } ,
     order: { 
         type: DataTypes.INTEGER,
+        
     }
 })
 module.exports = Task
