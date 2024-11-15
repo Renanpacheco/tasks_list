@@ -14,11 +14,14 @@ module.exports = class TaskController{
             data_limit: req.body.data_limit,
             order: req.body.order,
         }
-        await Task.create(task)
-        .then(() => {
-            res.json(task)
-        })
-        .catch(err => console.log(err))
+        if(search(task.name)){
+            res.json(400,{message: "Alredy has this task name registerd"})
+        }else{await Task.create(task)
+            .then(() => {
+                res.json(200,task)
+            })
+            .catch(err => console.log(err))
+        }
     }
 
     static async deleteTask(req, res) {
@@ -40,11 +43,24 @@ module.exports = class TaskController{
             cost: req.body.cost,
             data_limit: req.body.data_limit,
         }
-        try{
-            await Task.update(newTask, {where: { id: idTask }})
-            res.json(200, { message: "sucess" });
-        }catch(error){
-            console.log(error)
+        if(search(newTask.name)){
+            res.json(400,{message: "Alredy has this task name registerd"})
+        }else{
+            try{
+                await Task.update(newTask, {where: { id: idTask }})
+                res.json(200, { message: "sucess" });
+            }catch(error){
+                console.log(error)
+            }
         }
+    }
+}
+
+async function search(name) {
+    const verificationName = await Task.findOne({where: {name: name}})
+    if (verificationName){
+        return true
+    }else{
+        return false
     }
 }
