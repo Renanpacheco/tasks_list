@@ -62,6 +62,27 @@ module.exports = class TaskController{
             }
         }
     }
+
+    static async updateOrder(req,res){
+        const idTask = req.params.id
+        const newOrder= req.body.order
+        
+        const maxOrder = await Task.max(order)
+        console.log(maxOrder)
+
+        if(newOrder > maxOrder){
+            res.json(400, { message: "New order greater than maximum" });
+        }else{
+            await Task.update(newOrder, { where: { order: idTask } });
+            /*or (var i = newOrder; i < maxOrder; i++){
+                Task.
+            }*/
+
+        }
+        
+    }
+
+    
 }
 
 async function search(isName) {
