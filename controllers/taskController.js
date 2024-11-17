@@ -91,7 +91,7 @@ module.exports = class TaskController{
                     conn.query(query, (err, result) => {
                         if (err) {
                         console.log(err);
-                        return;
+                        return; //here
                         }
                     }); 
 
