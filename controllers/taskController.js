@@ -69,24 +69,34 @@ module.exports = class TaskController{
     static async updateOrder(req,res){
         const idTask = req.params.id
         const newOrder = req.body.order_task;
-        //console.log(newOrder)
-        const maxOrder = await Task.count();
-        //console.log(maxOrder)
+        const maxOrder = await Task.count()
 
         if(newOrder > maxOrder){
             res.json(400, { message: "New order greater than maximum" });
         }else{
             try{
-                
-                const query = `UPDATE tasks SET order_task='${newOrder}' WHERE id = ${idTask}`;
-                
-                conn.query(query, (err, result) => {
+                /*const queryOldOrder =
+                `SELECT order_task, id FROM tasks`;
+                const resultOld = await conn.query(queryOldOrder, (err, result) => {
                     if (err) {
                         console.log(err)
                         return
                     }
+                    
                 })
+                console.log("AQUI",resultOld)*/
+                
+                for (let i = 0; i < maxOrder; i++) {
+                    const query = `UPDATE tasks SET order_task = ${newOrder[i]} WHERE id = ${i+1}`
+                    conn.query(query, (err, result) => {
+                        if (err) {
+                        console.log(err);
+                        return;
+                        }
+                    }); 
 
+                }
+                
                 res.json(200, { message: "sucess" });
             }catch(error){
                 console.log(error)
