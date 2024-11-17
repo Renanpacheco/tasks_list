@@ -1,7 +1,7 @@
 const express = require("express");
 const conn = require("./db/conn");
 
-const port = 3000;
+const port = 5000;
 const app = express();
 
 //model

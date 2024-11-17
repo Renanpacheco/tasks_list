@@ -10,17 +10,17 @@ const Task = db.define('Task',{
     },
     name:{ 
         type: DataTypes.STRING,
-        require: true,
+        require: false,
     },
     cost:{ 
         type: DataTypes.FLOAT,
-        require: true,
+        require: false,
     },
     data_limit: { 
         type: DataTypes.DATE,
-        require: true,
+        require: false,
     } ,
-    order: { 
+    order_task: { 
         type: DataTypes.INTEGER,
         
     }
