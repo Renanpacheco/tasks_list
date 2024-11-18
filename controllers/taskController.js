@@ -16,15 +16,11 @@ module.exports = class TaskController{
             order_task: await Task.count()
         }
         
-        //console.log(task)
         const validation = await search(task.name)
         if(validation){
             res.json(400,{message: "Alredy has this task name registerd"})
         }else{await Task.create(task)
             .then(() => {
-                //task.order_task = req.body.id;
-                
-                //console.log(task.order_task);
                 res.json(200,task)
             })
             .catch(err => console.log(err))
@@ -52,12 +48,10 @@ module.exports = class TaskController{
         }
         console.log("aqui", newTask.name);
         const validation = await search(newTask.name);
-        //console.log(idTask.name, validation)
         if(validation){
             res.json(400,{message: "Alredy has this task name registerd"})
         }else{
             try{
-                //console.log(idTask, newTask);
                 await Task.update(newTask, {where: { id: idTask}})
                 res.json(200, { message: "sucess" });
             }catch(error){
@@ -67,7 +61,6 @@ module.exports = class TaskController{
     }
 
     static async updateOrder(req,res){
-        const idTask = req.params.id
         const newOrder = req.body.order_task;
         const maxOrder = await Task.count()
 
@@ -75,23 +68,13 @@ module.exports = class TaskController{
             res.json(400, { message: "New order greater than maximum" });
         }else{
             try{
-                /*const queryOldOrder =
-                `SELECT order_task, id FROM tasks`;
-                const resultOld = await conn.query(queryOldOrder, (err, result) => {
-                    if (err) {
-                        console.log(err)
-                        return
-                    }
-                    
-                })
-                console.log("AQUI",resultOld)*/
                 
                 for (let i = 0; i < maxOrder; i++) {
                     const query = `UPDATE tasks SET order_task = ${newOrder[i]} WHERE id = ${i+1}`
                     conn.query(query, (err, result) => {
                         if (err) {
                         console.log(err);
-                        return; //here
+                        return;
                         }
                     }); 
 
@@ -112,7 +95,6 @@ module.exports = class TaskController{
 async function search(isName) {
     console.log(isName)
     const verificationName = await Task.findOne({where: {name: isName}})
-    console.log(verificationName)
     if (verificationName !== null) {
         return true
     }else{
