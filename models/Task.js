@@ -16,12 +16,14 @@ const Task = db.define('Task',{
         type: DataTypes.FLOAT,
         require: true,
     },
-    date_limit: { 
+    dateLimit: { 
         type: DataTypes.DATE,
         require: true,
+        field: 'date_limit'
     } ,
-    order_task: { 
+    orderTask: { 
         type: DataTypes.INTEGER,
+        field: 'order_task'
         
     }
 })
