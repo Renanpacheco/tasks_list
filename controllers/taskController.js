@@ -8,7 +8,7 @@ const yup = require('yup');
 const taskValidation = yup.object().shape({
     name: yup.string("Erro: Necessário preencher esse campo nome com texto").required("Erro: Necessário preencher esse campo nome"),
     cost: yup.number("Erro: Necessário preencher esse campo custo com um numero").required("Erro: Necessário preencher esse campo custo com um numero").positive("Erro: Necessário preencher esse campo custo com um numero positivo"),
-    //date_limit: yup.date("Erro: Necessário preencher esse campo data com uma data no formato yyyy-mm-dd").required("Erro: Necessário preencher esse campo data com uma data no formato yyyy-mm-dd"),
+    
 })
 
 module.exports = class TaskController {
@@ -85,40 +85,11 @@ module.exports = class TaskController {
     }
   }
 
-  /*static async updateOrder(req,res){
-        const newOrder = req.body.order_task;
-        const maxOrder = await Task.count()
-        //console.log("aquieahyhgjuhahn", newOrder.length)
-
-        if(newOrder.length != maxOrder){
-            res.json(400, { message: "New order differ for the expected" });
-        }else{
-            try{
-                
-                for (let i = 0; i < maxOrder; i++) {
-                    const query = `UPDATE tasks SET order_task = ${newOrder[i]} WHERE id = ${i+1}`
-                    conn.query(query, (err, result) => {
-                        if (err) {
-                        console.log(err);
-                        return;
-                        }
-                    }); 
-
-                }
-                
-                res.json(200, { message: "sucess" });
-            }catch(error){
-                console.log(error)
-            }
-
-        }
-        
-    }*/
   static async updateOrder(req, res) {
-    const newOrder = req.body.order_task; // Recebe a nova ordem dos cards (ids dos cards na nova ordem)
-    const maxOrder = await Task.count(); // Conta o número de tarefas no banco de dados
+    const newOrder = req.body.order_task; // receive the new order od cards (id) 
+    const maxOrder = await Task.count(); // Count tasks on database
 
-    // Verifica se o número de novos pedidos é o mesmo que o número de tarefas no banco
+    
     if (newOrder.length !== maxOrder) {
       return res
         .status(400)
@@ -128,14 +99,14 @@ module.exports = class TaskController {
     }
 
     try {
-      // Construa a consulta SQL para atualizar a ordem dos cards de forma eficiente
+      
       let caseStatements = newOrder
         .map((taskId, index) => {
           return `WHEN id = ${taskId} THEN ${index + 1}`;
         })
         .join(" ");
 
-      // A consulta SQL completa usando a cláusula CASE
+      
       const query = `
             UPDATE tasks
             SET order_task = CASE
@@ -145,7 +116,7 @@ module.exports = class TaskController {
             WHERE id IN (${newOrder.join(", ")});
         `;
 
-      // Executa a consulta SQL
+      
       conn.query(query, (err, result) => {
         if (err) {
           console.log(err);
@@ -170,16 +141,3 @@ async function search(isName) {
         return false
     }
 }
-
-/*function validateEntryName(entryName){
-    const tempEntryName = entryName
-    console.log("AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",tempEntryName);
-    const verificationName = function(tempEntryName) { return /^\d+(?:\. \d+)? $/.test(tempEntryName); }
-    if (verificationName){
-            return true
-    }else{
-        return false
-
-    }
-
-}*/
