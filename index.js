@@ -1,7 +1,9 @@
 const express = require("express");
 const conn = require("./db/conn");
+const cors = require('cors')
 
-const port = 3000;
+
+const port = 5000;
 const app = express();
 
 //model
@@ -15,7 +17,12 @@ const taskController = require('./controllers/taskController');
 
 //config json response
 app.use(express.json());
+const options = {origin: 'http://localhost:3000', credential: 'true', optionsSuccessStatus: 200}
+app.use(cors(options))
 
-conn.sync({force: true}).then(() => {
+//use of routes
+app.use('/', taskRoutes);
+
+conn.sync().then(() => {
     app.listen(port);
 }).catch(err => console.log(err))
