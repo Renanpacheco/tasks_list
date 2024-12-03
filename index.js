@@ -21,7 +21,7 @@ const options = {origin: 'http://localhost:3000', credential: 'true', optionsSuc
 app.use(cors(options))
 
 //use of routes
-app.use('/', taskRoutes);
+app.use('/api', taskRoutes);
 
 conn.sync().then(() => {
     app.listen(port);
